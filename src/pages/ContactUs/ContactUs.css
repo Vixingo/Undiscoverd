@@ -19,7 +19,13 @@
   flex-direction: column;
   gap: 6px;
 }
-
+.error {
+  color: #f33;
+}
+.from_main_div,
+.form_iamge_div {
+  width: 50%;
+}
 .single--address .text--area .small--text {
   color: #333;
   font-size: 16px;
@@ -32,6 +38,9 @@
   font-size: 20px;
   font-weight: 500;
   line-height: 24px;
+}
+.main--text:hover {
+  color: #4c8fe1 !important;
 }
 
 .contact--form .single--input {
@@ -81,6 +90,15 @@
   padding: 15px 25px;
   resize: none;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
 
 @media screen and (min-width: 320px) {
   .single--address .text--area .main--text {
@@ -93,6 +111,12 @@
   .single--address .icon {
     width: 24px;
     height: 24px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .from_main_div,
+  .form_iamge_div {
+    width: 100%;
   }
 }
 @media screen and (min-width: 1200px) {

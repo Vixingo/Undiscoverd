@@ -1,19 +1,22 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './PlayerList.css';
-import Select from 'react-select';
-import PlayerRow from './PlayerRow';
-import axios from 'axios';
-import { BASE_URL } from '../../baseurl/baseurl';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./PlayerList.css";
+import Select from "react-select";
+import PlayerRow from "./PlayerRow";
+import axios from "axios";
+import { BASE_URL } from "../../baseurl/baseurl";
 const PlayersList = ({ isHome }) => {
+  // console.log("🚀 ~ PlayersList ~ isHome:", isHome);
   const navigate = useNavigate();
-  const user = localStorage?.getItem('user');
-  const [playerClass, setClass] = useState('');
-  const [playerState, setPlayerState] = useState('');
-  const [search, setSearch] = useState('');
-  const [position, setPosition] = useState('');
+  const user = localStorage?.getItem("user");
+  const [playerClass, setClass] = useState("");
+  const [playerState, setPlayerState] = useState("");
+  const [search, setSearch] = useState("");
+  const [position, setPosition] = useState("");
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [locationdata, setLocationData] = useState();
+  console.log("🚀 ~ PlayersList ~ locationdata:", locationdata);
 
   useEffect(() => {
     // fetch("/players.json")
@@ -25,59 +28,78 @@ const PlayersList = ({ isHome }) => {
 
   const fetchPlayers = async () => {
     let response = await axios.get(`${BASE_URL}/getPlayer`);
-    console.log('FETCH');
-    console.log(response);
+    // console.log();
+    // console.log("FETCH =====>", response);
     setLoading(false);
     setPlayers(response?.data?.players);
   };
+  const getlocationdara = async () => {
+    try {
+      const response = await axios.post(`${BASE_URL}/all_player_location_list`);
+      console.log("🚀 ~ getlocationdara ~ response:", response);
+      setLocationData(response.data.data);
+    } catch (error) {
+      console.log("🚀 ~ getlocationdara ~ error:", error);
+    }
+  };
+  useEffect(() => {
+    getlocationdara();
+  }, []);
 
   const classOptions = [
-    { label: 'All', value: '' },
-    { value: '2024', label: '2024' },
-    { value: '2023', label: '2023' },
-    { value: '2022', label: '2022' },
+    { label: "All", value: "" },
+    { value: "2024", label: "2024" },
+    { value: "2023", label: "2023" },
+    { value: "2022", label: "2022" },
   ];
+  // const stateOptions = [
+  //   { label: "All", value: "" },
+  //   { value: "North Carolina", label: "North Carolina"  },
+  //   { value: "new Jersy", label: "New Jersy" },
+  //   { value: "Los Angeles", label: "Los Angeles" },
+  // ];
   const stateOptions = [
-    { label: 'All', value: '' },
-    { value: 'North Carolina', label: 'North Carolina' },
-    { value: 'new Jersy', label: 'New Jersy' },
-    { value: 'Los Angeles', label: 'Los Angeles' },
+    { label: "All", value: "" },
+    ...(locationdata || []).map((item) => ({
+      value: item?.state || "", // Provide a default empty string if 'location' is undefined
+      label: item?.state || "", // Ensure label defaults to an empty string if 'location' is undefined
+    })),
   ];
   const positionOptions = [
-    { label: 'All', value: '' },
-    { value: 'PG', label: 'PG' },
-    { value: 'SG', label: 'SG' },
-    { value: 'SF', label: 'SF' },
-    { value: 'PF', label: 'PF' },
-    { value: 'C', label: 'C' },
+    { label: "All", value: "" },
+    { value: "PG", label: "PG" },
+    { value: "SG", label: "SG" },
+    { value: "SF", label: "SF" },
+    { value: "PF", label: "PF" },
+    { value: "C", label: "C" },
   ];
 
   const customSelectStyles = {
     control: (baseStyles, state) => ({
       ...baseStyles,
-      borderColor: '#DBDBDB', // Change border color
-      borderRadius: '70px', // Make it rounded
-      boxShadow: state.isFocused ? '0 0 0 1px #DBDBDB' : 'none',
-      '&:focus': {
-        borderColor: '#DBDBDB', // Change border color on focus
+      borderColor: "#DBDBDB", // Change border color
+      borderRadius: "70px", // Make it rounded
+      boxShadow: state.isFocused ? "0 0 0 1px #DBDBDB" : "none",
+      "&:focus": {
+        borderColor: "#DBDBDB", // Change border color on focus
       }, // Optional: shadow on focus
     }),
     menu: (baseStyles) => ({
       ...baseStyles,
       zIndex: 9999,
-      color: '#000',
+      color: "#000",
     }),
     option: (baseStyles, state) => ({
       ...baseStyles,
-      backgroundColor: state.isSelected ? '#f33' : 'white',
+      backgroundColor: state.isSelected ? "#f33" : "white",
     }),
     placeholder: (baseStyles) => ({
       ...baseStyles,
-      color: 'grey',
+      color: "grey",
     }),
     singleValue: (baseStyles) => ({
       ...baseStyles,
-      color: '#000',
+      color: "#000",
     }),
   };
   const filteredPlayers = () => {
@@ -94,7 +116,7 @@ const PlayersList = ({ isHome }) => {
         ? player?.position?.toLowerCase()?.startsWith(positionLower)
         : true;
       const stateMatches = playerState
-        ? player?.location?.toLowerCase()?.startsWith(playerStateLower)
+        ? player?.location?.split(", ")[1]?.toLowerCase() === playerStateLower
         : true;
       const searchMatches = search
         ? player?.auth?.name?.toLowerCase()?.includes(searchLower)
@@ -108,9 +130,16 @@ const PlayersList = ({ isHome }) => {
     <div>
       {/* top part */}
       {isHome ? (
-        ''
+        ""
       ) : (
-        <div className="relative lg:w-[90%] lg:mx-auto">
+        <div
+          className="relative lg:w-[90%] lg:mx-auto"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            paddingTop: "1rem",
+          }}>
           {/* search bar */}
           <div className="w-full relative ">
             {/* icon */}
@@ -120,8 +149,7 @@ const PlayersList = ({ isHome }) => {
                 width="21"
                 height="21"
                 viewBox="0 0 21 21"
-                fill="none"
-              >
+                fill="none">
                 <circle
                   cx="9.76688"
                   cy="9.76688"
@@ -154,7 +182,7 @@ const PlayersList = ({ isHome }) => {
           </div>
 
           {/* select options */}
-          <div className="grid grid-cols-3  items-center justify-between pt-3 lg:flex-col lg:flex-row gap-3 lg:gap-0">
+          <div className="grid grid-cols-3  items-center justify-between  lg:flex-col lg:flex-row gap-3 lg:gap-0">
             <div className=" w-full lg:w-[230px]">
               <Select
                 onChange={(e) => {
@@ -190,16 +218,14 @@ const PlayersList = ({ isHome }) => {
           {/* go back */}
           <div
             onClick={() => navigate(-1)}
-            className="w-6 h-6 cursor-pointer absolute top-1/2 -translate-y-1/2 -left-9 hidden lg:block "
-          >
+            className="w-6 h-6 cursor-pointer absolute top-1/2 -translate-y-1/2 -left-9 hidden lg:block ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="17"
               height="15"
               viewBox="0 0 17 15"
               fill="none"
-              className="w-full h-full"
-            >
+              className="w-full h-full">
               <path
                 d="M1.25 7.27441L16.25 7.27441"
                 stroke="#130F26"
@@ -220,7 +246,7 @@ const PlayersList = ({ isHome }) => {
       )}
 
       {/* player table area */}
-      <div className=" pt-12 lg:pt-[60px] mb-8 lg:mb-[115px] overflow-x-auto min-w-full ">
+      <div className=" pt-1  mb-8 lg:mb-[115px] overflow-x-auto min-w-full ">
         {players && (
           <div>
             {/* player heading */}
@@ -229,8 +255,8 @@ const PlayersList = ({ isHome }) => {
               <p className=" min-w-[120px] lg:w-[15%]">Class</p>
               <p className=" min-w-[120px] lg:w-[10%]">Height</p>
               <p className=" min-w-[140px] lg:w-[10%]">Position</p>
-              {JSON.parse(user)?.role === 'coach' && (
-                <p className=" min-w-[170px] lg:w-[10%]">Favourite</p>
+              {JSON.parse(user)?.role === "coach" && (
+                <p className=" min-w-[170px] lg:w-[10%]">Favorite</p>
               )}
               <p className=" min-w-[200px] lg:flex-grow">Star Rating</p>
             </div>
@@ -248,8 +274,7 @@ const PlayersList = ({ isHome }) => {
                       className="w-20 h-20 text-gray-200 animate-spin  fill-[#FF3333]"
                       viewBox="0 0 100 101"
                       fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
+                      xmlns="http://www.w3.org/2000/svg">
                       <path
                         d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
                         fill="currentColor"

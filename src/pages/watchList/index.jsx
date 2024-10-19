@@ -1,12 +1,12 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
-import { Collapse } from 'react-collapse';
-import axios from 'axios';
-import { BASE_URL } from '../../baseurl/baseurl';
-import toastr from 'toastr';
-import 'toastr/build/toastr.min.css';
-import us from '../../assets/images/us.png';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useEffect, useState } from "react";
+import { Collapse } from "react-collapse";
+import axios from "axios";
+import { BASE_URL } from "../../baseurl/baseurl";
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
+import us from "../../assets/images/us.png";
+import { useNavigate } from "react-router-dom";
 
 export default function WatchList() {
   const navigate = useNavigate();
@@ -15,30 +15,32 @@ export default function WatchList() {
     setIsCollapsed(index === isCollapsed ? -1 : index); // Toggle collapse state
   };
 
-  const user = localStorage?.getItem('user');
+  const user = localStorage?.getItem("user");
   const [loading, setLoading] = useState(true);
   const [players, setPlayer] = useState();
 
   const getAvailabilityPlayer = async () => {
+    setLoading(true);
     try {
       let response = await axios.get(
+        // `${BASE_URL}/favourites-group/668ebcc37dd7cd360cb43ae5`
         `${BASE_URL}/favourites-group/${JSON.parse(user)._id}`
       );
+      console.log("🚀 ~ getAvailabilityPlayer ~ response:", response);
       console.log(response.data);
       setLoading(false);
       setPlayer(response.data?.data);
     } catch (error) {
+      setLoading(false);
+      console.log("🚀 ~ getAvailabilityPlayer ~ error:", error);
       if (error?.response && error?.response?.data) {
-        toastr.error(error?.response?.data?.error);
       } else {
-        toastr.error('Server error please try again');
       }
     }
   };
-  console.log(players, 'coach watch');
+  console.log(players, "coach watch");
 
   useEffect(() => {
-    setLoading(true);
     getAvailabilityPlayer();
   }, []);
   return (
@@ -48,15 +50,13 @@ export default function WatchList() {
         <button
           onClick={() => navigate(-1)}
           type="button"
-          class=" hover:bg-gray-100 font-medium rounded-full text-sm p-1.5 text-center inline-flex items-center"
-        >
+          class=" hover:bg-gray-100 font-medium rounded-full text-sm p-1.5 text-center inline-flex items-center">
           <svg
             width="24"
             height="24"
             viewBox="0 0 24 24"
             fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
+            xmlns="http://www.w3.org/2000/svg">
             <path
               d="M4.25 12.2734L19.25 12.2734"
               stroke="#130F26"
@@ -77,15 +77,13 @@ export default function WatchList() {
         <div className="flex items-center gap-1">
           <button
             type="button"
-            class=" hover:bg-gray-100   font-medium rounded-full text-sm p-1.5 text-center inline-flex items-center"
-          >
+            class=" hover:bg-gray-100   font-medium rounded-full text-sm p-1.5 text-center inline-flex items-center">
             <svg
               width="24"
               height="24"
               viewBox="0 0 24 24"
               fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+              xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
                 stroke="#25282B"
@@ -124,8 +122,7 @@ export default function WatchList() {
                 className="w-20 h-20 text-gray-200 animate-spin  fill-[#FF3333]"
                 viewBox="0 0 100 101"
                 fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+                xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
                   fill="currentColor"
@@ -151,13 +148,11 @@ export default function WatchList() {
                         class="w-10 h-10 text-[#292D32] "
                         fill="currentColor"
                         viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
+                        xmlns="http://www.w3.org/2000/svg">
                         <path
                           fill-rule="evenodd"
                           d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                          clip-rule="evenodd"
-                        ></path>
+                          clip-rule="evenodd"></path>
                       </svg>
                     </div>
                   </div>
@@ -178,31 +173,28 @@ export default function WatchList() {
                         src={item?.picture}
                         class="w-10 h-10  rounded-full"
                         alt={item?.picture}
-                        style={{ objectFit: 'cover' }}
+                        style={{ objectFit: "cover" }}
                       />
                     ))}
 
                     <a
                       class="ps-6 flex items-center justify-center w-10 h-10 text-sm font-medium text-black  rounded-full"
-                      href="#"
-                    >
+                      href="#">
                       {items?.players[0]?.length > 3
                         ? items?.players[0]?.length - 3
-                        : ''}
+                        : ""}
                     </a>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleToggleCollapse(index)}
-                    class=" hover:bg-gray-100   font-medium rounded-full text-sm p-1.5 text-center inline-flex items-center"
-                  >
+                    class=" hover:bg-gray-100   font-medium rounded-full text-sm p-1.5 text-center inline-flex items-center">
                     <svg
                       width="20"
                       height="20"
                       viewBox="0 0 20 20"
                       fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
+                      xmlns="http://www.w3.org/2000/svg">
                       <path
                         d="M7.08301 4.16927L12.9163 10.0026L7.08301 15.8359"
                         stroke="black"
@@ -216,19 +208,23 @@ export default function WatchList() {
               </div>
               <div
                 className={`${
-                  isCollapsed === index ? 'block' : 'hidden'
-                } w-full py-4 bg-transparent`}
-              >
+                  isCollapsed === index ? "block" : "hidden"
+                } w-full py-4 bg-transparent`}>
                 <Collapse isOpened={isCollapsed === index}>
                   <div>
                     {items?.players[0].map((items, index) => (
                       <div
                         key={Math.random()}
+                        onClick={() =>
+                          navigate("/Scouting", {
+                            state: items,
+                          })
+                        }
                         className="p-4 rounded-md  w-full"
                         style={{
-                          boxShadow: '0px 0px 23px 0px #00000014',
-                        }}
-                      >
+                          cursor: "pointer",
+                          boxShadow: "0px 0px 23px 0px #00000014",
+                        }}>
                         {/* content */}
                         <div className="flex items-center justify-between gap-4">
                           <div className="relative flex items-center gap-2">
@@ -248,15 +244,14 @@ export default function WatchList() {
                               </span>
                             </div>
                             <div>
-                              <p className="text-[16px] font-bold flex items-center gap-2">
+                              <p className="text-[16px]  font-bold flex items-center gap-2  text-[#3b82f6] hover:underline cursor-pointer">
                                 {items?.auth?.name}
                                 <svg
                                   width="15"
                                   height="15"
                                   viewBox="0 0 15 15"
                                   fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
+                                  xmlns="http://www.w3.org/2000/svg">
                                   <path
                                     fill-rule="evenodd"
                                     clip-rule="evenodd"
@@ -274,8 +269,7 @@ export default function WatchList() {
                                   height="18"
                                   viewBox="0 0 14 18"
                                   fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
+                                  xmlns="http://www.w3.org/2000/svg">
                                   <path
                                     fill-rule="evenodd"
                                     clip-rule="evenodd"
@@ -318,8 +312,7 @@ export default function WatchList() {
                 className="w-20 h-20 text-gray-200 animate-spin  fill-[#FF3333]"
                 viewBox="0 0 100 101"
                 fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+                xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
                   fill="currentColor"
@@ -345,13 +338,11 @@ export default function WatchList() {
                         class="w-10 h-10 text-[#292D32] "
                         fill="currentColor"
                         viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
+                        xmlns="http://www.w3.org/2000/svg">
                         <path
                           fill-rule="evenodd"
                           d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                          clip-rule="evenodd"
-                        ></path>
+                          clip-rule="evenodd"></path>
                       </svg>
                     </div>
                   </div>
@@ -372,31 +363,28 @@ export default function WatchList() {
                         src={item?.picture}
                         class="w-10 h-10  rounded-full"
                         alt={item?.picture}
-                        style={{ objectFit: 'cover' }}
+                        style={{ objectFit: "cover" }}
                       />
                     ))}
 
                     <a
                       class="ps-6 flex items-center justify-center w-10 h-10 text-sm font-medium text-black  rounded-full"
-                      href="#"
-                    >
+                      href="#">
                       {items?.players[0]?.length > 3
                         ? items?.players[0]?.length - 3
-                        : ''}
+                        : ""}
                     </a>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleToggleCollapse(index)}
-                    class=" hover:bg-gray-100   font-medium rounded-full text-sm p-1.5 text-center inline-flex items-center"
-                  >
+                    class=" hover:bg-gray-100   font-medium rounded-full text-sm p-1.5 text-center inline-flex items-center">
                     <svg
                       width="20"
                       height="20"
                       viewBox="0 0 20 20"
                       fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
+                      xmlns="http://www.w3.org/2000/svg">
                       <path
                         d="M7.08301 4.16927L12.9163 10.0026L7.08301 15.8359"
                         stroke="black"
@@ -410,9 +398,8 @@ export default function WatchList() {
               </div>
               <div
                 className={`${
-                  isCollapsed === index ? 'block' : 'hidden'
-                } w-full py-4 bg-transparent`}
-              >
+                  isCollapsed === index ? "block" : "hidden"
+                } w-full py-4 bg-transparent`}>
                 <Collapse isOpened={isCollapsed === index}>
                   <div>
                     {items?.players[0].map((items, index) => (
@@ -420,9 +407,8 @@ export default function WatchList() {
                         key={Math.random()}
                         className="p-4 rounded-md  w-full"
                         style={{
-                          boxShadow: '0px 0px 23px 0px #00000014',
-                        }}
-                      >
+                          boxShadow: "0px 0px 23px 0px #00000014",
+                        }}>
                         {/* content */}
                         <div className="flex items-center justify-between gap-4">
                           <div className="relative flex items-center gap-2">
@@ -442,15 +428,14 @@ export default function WatchList() {
                               </span>
                             </div>
                             <div>
-                              <p className="text-[16px] font-bold flex items-center gap-2">
+                              <p className="text-[16px] font-bold flex items-center gap-2 text-[#3b82f6] hover:underline cursor-pointer">
                                 {items?.auth?.name}
                                 <svg
                                   width="15"
                                   height="15"
                                   viewBox="0 0 15 15"
                                   fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
+                                  xmlns="http://www.w3.org/2000/svg">
                                   <path
                                     fill-rule="evenodd"
                                     clip-rule="evenodd"
@@ -468,8 +453,7 @@ export default function WatchList() {
                                   height="18"
                                   viewBox="0 0 14 18"
                                   fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
+                                  xmlns="http://www.w3.org/2000/svg">
                                   <path
                                     fill-rule="evenodd"
                                     clip-rule="evenodd"

@@ -1,21 +1,24 @@
-import { Link, useNavigate } from 'react-router-dom';
-import AuthTop from '../../components/AuthPage/AuthTop';
-import './AuthPage.css';
-import { useState } from 'react';
-import toastr from 'toastr';
-import 'toastr/build/toastr.min.css';
-import axios from 'axios';
-import { BASE_URL } from '../../baseurl/baseurl';
+import { Link, useNavigate } from "react-router-dom";
+import AuthTop from "../../components/AuthPage/AuthTop";
+import "./AuthPage.css";
+import { useState } from "react";
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
+import axios from "axios";
+import { BASE_URL } from "../../baseurl/baseurl";
+import Navbar from "../../shared/Navbar2/Navbar";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 const SignUp = () => {
   const navigate = useNavigate();
   const [isAgreed, setIsAgreed] = useState(false);
   const [state, setState] = useState({
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
-    email: '',
-    password: '',
-    role: '',
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    email: "",
+    password: "",
+    role: "",
   });
 
   const register = async (e) => {
@@ -23,23 +26,21 @@ const SignUp = () => {
     console.log(state);
     try {
       let response = await axios.post(`${BASE_URL}/register`, state);
-      // toastr.success(response.data.message)
-      toastr.success('Account created. Login to continue');
+      toastr.success(response.data.message);
+      console.log("🚀 ~ register ~ BASE_URL:", BASE_URL);
+      console.log("🚀 ~ register ~ response:", response);
+      toastr.success("Account created. Login to continue");
       setState({
-        firstName: '',
-        lastName: '',
-        phoneNumber: '',
-        email: '',
-        password: '',
-        role: '',
+        firstName: "",
+        lastName: "",
+        phoneNumber: "",
+        email: "",
+        password: "",
+        role: "",
       });
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
-      if (error?.response && error?.response?.data) {
-        toastr.error(error?.response?.data?.error);
-      } else {
-        toastr.error('Server error please try again');
-      }
+      console.log("🚀 ~ register ~ error:", error);
     }
   };
   const handleRoleChange = (e) => {
@@ -51,11 +52,12 @@ const SignUp = () => {
 
   return (
     <div>
+      <Navbar />
       {/* content wrapper */}
       <div className=" w-full flex flex-col items-center justify-center my-[100px]">
         {/* top area */}
         <div>
-          <AuthTop title={'Sign Up!'} subtitle={'Let’s create new account'} />
+          <AuthTop title={"Sign Up!"} subtitle={"Let’s create new account"} />
         </div>
 
         {/* input wrapper */}
@@ -81,8 +83,7 @@ const SignUp = () => {
                 width="16"
                 height="20"
                 viewBox="0 0 16 20"
-                fill="none"
-              >
+                fill="none">
                 <path
                   fillRule="evenodd"
                   clipRule="evenodd"
@@ -113,8 +114,7 @@ const SignUp = () => {
                 width="16"
                 height="20"
                 viewBox="0 0 16 20"
-                fill="none"
-              >
+                fill="none">
                 <path
                   fillRule="evenodd"
                   clipRule="evenodd"
@@ -145,8 +145,7 @@ const SignUp = () => {
                 width="20"
                 height="18"
                 viewBox="0 0 20 18"
-                fill="none"
-              >
+                fill="none">
                 <path
                   fillRule="evenodd"
                   clipRule="evenodd"
@@ -157,37 +156,16 @@ const SignUp = () => {
             </div>
           </div>
 
-          <div className="w-full relative">
-            <input
+          <div className="w-full relative phone_div">
+            <PhoneInput
               value={state.phoneNumber}
-              onChange={(e) =>
-                setState({
-                  ...state,
-                  [e.target.name]: e.target.value,
-                })
-              }
-              type="number"
+              international
+              countryCallingCodeEditable={false}
+              onChange={(phoneNumber) => setState({ ...state, phoneNumber })}
+              placeholder="Phone number"
               name="phoneNumber"
               id="phone"
-              placeholder="Phone number"
             />
-
-            <div className="icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M9.53174 10.4724C13.5208 14.4604 14.4258 9.84672 16.9656 12.3848C19.4143 14.8328 20.8216 15.3232 17.7192 18.4247C17.3306 18.737 14.8616 22.4943 6.1846 13.8197C-2.49348 5.144 1.26158 2.67244 1.57397 2.28395C4.68387 -0.826154 5.16586 0.589383 7.61449 3.03733C10.1544 5.5765 5.54266 6.48441 9.53174 10.4724Z"
-                  fill="#898989"
-                />
-              </svg>
-            </div>
           </div>
           <div className="w-full relative">
             <input
@@ -210,8 +188,7 @@ const SignUp = () => {
                 width="18"
                 height="20"
                 viewBox="0 0 18 20"
-                fill="none"
-              >
+                fill="none">
                 <path
                   fillRule="evenodd"
                   clipRule="evenodd"
@@ -226,8 +203,7 @@ const SignUp = () => {
             <select
               onChange={handleRoleChange}
               value={state?.role}
-              className="rounded-lg border-gray-300 shadow-sm focus:border-primaryColor focus:ring focus:ring-primaryColor focus:ring-opacity-50"
-            >
+              className="rounded-lg border-gray-300 shadow-sm focus:border-primaryColor focus:ring focus:ring-primaryColor focus:ring-opacity-50">
               <option value="">Select Role</option>
               <option value="coach">Coach</option>
               <option value="player">Player</option>
@@ -254,10 +230,9 @@ const SignUp = () => {
             onClick={register}
             className={`submit lg:mt-2.5 ${
               isAgreed
-                ? 'pointer-events-auto bg-primaryColor'
-                : 'pointer-events-none bg-[#d1d1d1]'
-            } `}
-          >
+                ? "pointer-events-auto bg-primaryColor"
+                : "pointer-events-none bg-[#d1d1d1]"
+            } `}>
             Agree and continue
           </button>
         </form>
@@ -265,9 +240,9 @@ const SignUp = () => {
         {/* instruction text */}
 
         <p className="text-center text-[#0E0E0E] text-base leading-6 mt-12 ">
-          Already have an account?{' '}
-          <Link to={'/login'} className="font-bold">
-            {' '}
+          Already have an account?{" "}
+          <Link to={"/login"} className="font-bold">
+            {" "}
             Login
           </Link>
         </p>

@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
-import { BASE_URL } from '../../baseurl/baseurl';
-import React from 'react';
+import { useState, useRef, useEffect } from "react";
+import axios from "axios";
+import { BASE_URL } from "../../baseurl/baseurl";
+import React from "react";
 const CustomVideoPlayer = ({ src, alt }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef(null);
@@ -13,12 +13,12 @@ const CustomVideoPlayer = ({ src, alt }) => {
 
     const videoElement = videoRef.current;
     if (videoElement) {
-      videoElement.addEventListener('ended', handleVideoEnded);
+      videoElement.addEventListener("ended", handleVideoEnded);
     }
 
     return () => {
       if (videoElement) {
-        videoElement.removeEventListener('ended', handleVideoEnded);
+        videoElement.removeEventListener("ended", handleVideoEnded);
       }
     };
   }, []);
@@ -76,7 +76,7 @@ const CustomVideoPlayer = ({ src, alt }) => {
   };
 
   return (
-    <div className="relative w-full h-[250px] lg:h-[220px] rounded-lg overflow-hidden">
+    <div className="relative w-full h-[195px] lg:h-[185px] rounded-lg overflow-hidden">
       <video
         ref={videoRef}
         className="w-full h-full object-cover"
@@ -86,16 +86,14 @@ const CustomVideoPlayer = ({ src, alt }) => {
       />
       <div
         className="absolute inset-0 flex items-center justify-center  cursor-pointer"
-        onClick={handlePlayPause}
-      >
+        onClick={handlePlayPause}>
         <button className="text-white text-4xl">
           {isPlaying ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-10 w-10"
               viewBox="0 0 20 20"
-              fill="currentColor"
-            >
+              fill="currentColor">
               <path
                 fillRule="evenodd"
                 clipRule="evenodd"
@@ -105,19 +103,17 @@ const CustomVideoPlayer = ({ src, alt }) => {
           ) : (
             <div
               style={{
-                padding: '8px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(7px)',
-              }}
-            >
+                padding: "8px",
+                borderRadius: "50%",
+                background: "rgba(255, 255, 255, 0.1)",
+                backdropFilter: "blur(7px)",
+              }}>
               <svg
                 width="29"
                 height="29"
                 viewBox="0 0 29 29"
                 fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+                xmlns="http://www.w3.org/2000/svg">
                 <path
                   fill-rule="evenodd"
                   clip-rule="evenodd"

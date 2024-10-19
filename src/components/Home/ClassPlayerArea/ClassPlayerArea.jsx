@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
-import SectionTop from '../SectionTop/SectionTop';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import SectionTop from "../SectionTop/SectionTop";
+import { Link } from "react-router-dom";
+import "./Classplayerarea.css";
 
 const ClassPlayerArea = ({ classPlayers, allPlayers, loading }) => {
   const [playerClass, setClass] = useState(true);
+  // console.log("🚀 ~ ClassPlayerArea ~ playerClass:", playerClass);
 
   return (
     <div>
       {/* top area */}
       <SectionTop
-        title={'Class of 2024 Player’s'}
+        title={"Class of 2025 Player’s"}
         setClass={setClass}
         isClass
       />
@@ -23,8 +25,7 @@ const ClassPlayerArea = ({ classPlayers, allPlayers, loading }) => {
               className="w-20 h-20 text-gray-200 animate-spin  fill-[#FF3333]"
               viewBox="0 0 100 101"
               fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+              xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
                 fill="currentColor"
@@ -39,43 +40,47 @@ const ClassPlayerArea = ({ classPlayers, allPlayers, loading }) => {
         </div>
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-7 pt-6 pb-10 player-box-home">
-          {(!playerClass ? allPlayers : classPlayers)?.map((player, index) => (
-            <div
-              key={index}
-              className="lg:w-[15rem] w-full flex flex-col items-center gap-5"
-            >
-              {/* player image */}
-              <div className="w-[100px] h-[100px]  lg:w-[130px]   lg:h-[130px] rounded-full overflow-hidden">
-                <img
-                  className="w-full h-full object-cover"
-                  src={player?.picture}
-                  alt=""
-                />
-              </div>
+          {playerClass === 2025 ? null : (
+            <>
+              {(!playerClass ? allPlayers : classPlayers)?.map(
+                (player, index) => (
+                  <div
+                    key={index}
+                    className="lg:w-[15rem] w-full flex flex-col items-center gap-5">
+                    {/* player image */}
+                    <div className="w-[100px] h-[100px]  lg:w-[130px]   lg:h-[130px] rounded-full overflow-hidden">
+                      <img
+                        className="w-full h-full object-cover"
+                        src={player?.picture}
+                        alt=""
+                      />
+                    </div>
 
-              {/* player details */}
-              <div className="text-center">
-                <Link to={`/player-profile/${player?.auth?._id}`}>
-                  <p className="text-[16px] cursor-pointer text-base font-medium leading-normal text-black hover:underline">
-                    {player?.auth?.name}
-                  </p>
-                </Link>
-                <div className="m-0 flex items-center text-sm font-thin text-[#171717] gap-[2px] lg:flex-row flex-col">
-                  <span>{player?.position.toUpperCase()}</span>
-                  <span className=" hidden lg:block">l</span>
-                  <span> {player?.height} </span>
-                  <span className=" hidden lg:block">l</span>
-                  <span>{player?.location}</span>
-                </div>
-                <Link
-                  to={`/player-profile/${player?.auth?._id}`}
-                  className="mt-[8px] inline-block px-5 py-1 text-[12px] text-[#000] leading-5 border border-solid border-[#000] rounded-[30px]"
-                >
-                  View profile
-                </Link>
-              </div>
-            </div>
-          ))}
+                    {/* player details */}
+                    <div className="text-center players_card_of_class">
+                      <Link to={`/player-profile/${player?.auth?._id}`}>
+                        <p className="text-[16px] cursor-pointer text-base font-medium leading-normal text-[#000] hover:underline hover:text-[#4C8FE1]">
+                          {player?.auth?.name}
+                        </p>
+                      </Link>
+                      <div className="m-0 flex items-center text-sm gap-2 font-thin text-[#171717] gap-[2px] lg:flex-row flex-col">
+                        <span>{player?.position.toUpperCase()}</span>
+                        <span className=" hidden lg:block">l</span>
+                        <span> {player?.height} </span>
+                        <span className=" hidden lg:block">l</span>
+                        <span>{player?.location}</span>
+                      </div>
+                      <Link
+                        to={`/player-profile/${player?.auth?._id}`}
+                        className="mt-[8px] inline-block px-5 py-1 text-[12px] text-[#000] leading-5 border border-solid border-[#000] rounded-[30px]">
+                        View profile
+                      </Link>
+                    </div>
+                  </div>
+                )
+              )}
+            </>
+          )}
         </div>
       )}
     </div>

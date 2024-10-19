@@ -138,17 +138,23 @@
 // }
 // export { ProfileProvider, ProfileCreateContext, useProfileContext };
 
-import { createContext, useContext, useEffect, useReducer } from 'react';
-import Reducer from '../reducer/profileReducer';
-import axios from 'axios';
-import { BASE_URL } from '../../baseurl/baseurl';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
+import Reducer from "../reducer/profileReducer";
+import axios from "axios";
+import { BASE_URL } from "../../baseurl/baseurl";
 
 const ProfileCreateContext = createContext();
 const initialState = {
   personalInformation: [],
   contactDetail: [],
   academics: [],
-  aboutme: '',
+  aboutme: "",
   accomplishments: [],
   coachinformation: [],
   offers: [],
@@ -157,55 +163,57 @@ const initialState = {
   videoLinks: [],
   coach: {
     personalInformation: {
-      firstName: '',
-      lastName: '',
-      schoolCollege: '',
-      position: '',
-      teamName: '',
-      conference: '',
+      firstName: "",
+      lastName: "",
+      schoolCollege: "",
+      position: "",
+      teamName: "",
+      conference: "",
     },
     contactDetail: {
-      phone: '',
-      email: '',
-      twitterLink: '',
-      instagramLink: '',
-      linkedinLink: '',
+      phone: "",
+      email: "",
+      twitterLink: "",
+      instagramLink: "",
+      linkedinLink: "",
     },
     coachingExperience: {
       yearsOfExperience: 10,
       previousTeams: [
         {
-          teamName: '',
-          coachPosition: '',
+          teamName: "",
+          coachPosition: "",
           yearsCoached: 1,
         },
       ],
     },
     recruitmentPreference: {
-      positionsRecruitingFor: '',
-      playerCharacteristics: '',
-      academicRequirements: '',
+      positionsRecruitingFor: "",
+      playerCharacteristics: "",
+      academicRequirements: "",
     },
-    teamAccomplishments: [''],
-    philosophyPlayingStyle: [''],
+    teamAccomplishments: [""],
+    philosophyPlayingStyle: [""],
     additionalInformation: {
-      recruitmentCalendar: '',
-      tryouts: '',
-      officialVisits: '',
-      signingDay: '',
-      programHighlights: '',
-      contactPreferences: '',
+      recruitmentCalendar: "",
+      tryouts: "",
+      officialVisits: "",
+      signingDay: "",
+      programHighlights: "",
+      contactPreferences: "",
     },
   },
 };
 
 const ProfileProvider = ({ children }) => {
   const [state, dispatch] = useReducer(Reducer, initialState);
-
+  const [videoFields, setVideoFields] = useState([
+    { id: 1, embedLink: "", title: "", description: "", error: "" },
+  ]);
   useEffect(() => {
     const fetchProfile = async () => {
       if (window.location.href.match(/create-player-profile/)) {
-        let userId = JSON.parse(localStorage.getItem('user'))?._id;
+        let userId = JSON.parse(localStorage.getItem("user"))?._id;
 
         if (userId) {
           try {
@@ -214,7 +222,7 @@ const ProfileProvider = ({ children }) => {
             if (response.status === 200) {
               let { profile, players } = response.data;
               if (profile.about) {
-                dispatch({ type: 'UPDATE_ABOUT_ME', payload: profile.about });
+                dispatch({ type: "UPDATE_ABOUT_ME", payload: profile.about });
               }
               if (players && players.length > 0) {
                 const player = players[0];
@@ -235,16 +243,16 @@ const ProfileProvider = ({ children }) => {
                   fieldsToDispatch
                 )) {
                   dispatch({
-                    type: 'UPDATE_PERSONAL_INFORMATION',
+                    type: "UPDATE_PERSONAL_INFORMATION",
                     payload: { fieldName, value },
                   });
                 }
               }
               if (profile.auth.phoneNumber) {
                 dispatch({
-                  type: 'UPDATE_CONTACT_INFORMATION',
+                  type: "UPDATE_CONTACT_INFORMATION",
                   payload: {
-                    fieldName: 'phoneNumber',
+                    fieldName: "phoneNumber",
                     value: profile.auth.phoneNumber,
                   },
                 });
@@ -252,16 +260,16 @@ const ProfileProvider = ({ children }) => {
               if (profile.academics && profile.academics.length > 0) {
                 const academics = profile.academics[0];
                 const academicFields = [
-                  'gpa',
-                  'satScore',
-                  'actScore',
-                  'ncaaId',
+                  "gpa",
+                  "satScore",
+                  "actScore",
+                  "ncaaId",
                 ];
 
                 for (const field of academicFields) {
                   if (academics[field] !== undefined) {
                     dispatch({
-                      type: 'UPDATE_ACADEMICS',
+                      type: "UPDATE_ACADEMICS",
                       payload: { fieldName: field, value: academics[field] },
                     });
                   }
@@ -273,15 +281,15 @@ const ProfileProvider = ({ children }) => {
               ) {
                 const accomplishments = profile.athleticaccomplishments;
                 dispatch({
-                  type: 'UPDATE_ACCOMPLISHMENTS',
+                  type: "UPDATE_ACCOMPLISHMENTS",
                   payload: accomplishments,
                 });
               }
               if (profile.offers && profile.offers.length > 0) {
-                dispatch({ type: 'UPDATE_OFFERS', payload: profile.offers });
+                dispatch({ type: "UPDATE_OFFERS", payload: profile.offers });
               }
               if (profile.photos && profile.photos.length > 0) {
-                dispatch({ type: 'ADD_MEDIA_FILES', payload: profile.photos });
+                dispatch({ type: "ADD_MEDIA_FILES", payload: profile.photos });
               }
               if (profile.coach) {
                 const coach = profile.coach;
@@ -296,7 +304,7 @@ const ProfileProvider = ({ children }) => {
                 delete updatedCoach.phone;
 
                 dispatch({
-                  type: 'UPDATE_COACH_INFORMATION',
+                  type: "UPDATE_COACH_INFORMATION",
                   payload: updatedCoach,
                 });
               }
@@ -305,7 +313,7 @@ const ProfileProvider = ({ children }) => {
                   .filter((u) => u != null)
                   .map((link) => {
                     dispatch({
-                      type: 'UPDATE_CONTACT_INFORMATION',
+                      type: "UPDATE_CONTACT_INFORMATION",
                       payload: {
                         fieldName: link.social_type,
                         value: link.link,
@@ -315,7 +323,7 @@ const ProfileProvider = ({ children }) => {
               }
             }
           } catch (error) {
-            console.error('Failed to fetch profile data:', error);
+            console.error("Failed to fetch profile data:", error);
           }
         }
       }
@@ -325,7 +333,8 @@ const ProfileProvider = ({ children }) => {
   }, []);
 
   return (
-    <ProfileCreateContext.Provider value={{ state, dispatch }}>
+    <ProfileCreateContext.Provider
+      value={{ state, dispatch, videoFields, setVideoFields }}>
       {children}
     </ProfileCreateContext.Provider>
   );

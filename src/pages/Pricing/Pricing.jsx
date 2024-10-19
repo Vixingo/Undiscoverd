@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import SinglePricing from './SinglePricing';
+import { useState, useEffect } from "react";
+import SinglePricing from "./SinglePricing";
 
 const Pricing = () => {
   const [isToggled, setIsToggled] = useState(false);
@@ -16,16 +16,27 @@ const Pricing = () => {
   const commonPillStyle = `py-2 px-10 rounded-[30px]  relative z-[15] ease-in-out duration-300 cursor-pointer`;
 
   const serviceList = [
-    'Unlimited Projects',
-    'Unlimited Invoices',
-    'Unlimited Contracts',
-    'Media Sharing',
-    'Unlimited invoices',
-    'Unlimited CRM',
-    'Unlimited Clients Spaces',
+    "Profile Display: Your profile is visible in the player search database.",
+    "Visibility: Basic presence on the largest recruiting platform.",
+    " Profile Management: Easily update your profile with achievements and stats.",
+  ];
+  const serviceList2 = [
+    "Profile Display: Your profile is visible in the player search database.",
+    "Visibility: Basic presence on the largest recruiting platform.",
+    "Featured Article: Your profile includes an article on the available player page",
+    "Weekly Reports: Your profile and article are featured in weekly reports sent to coaches.",
+    "Enhanced Searchability: Stand out in the player search database.",
+  ];
+  const serviceList3 = [
+    "Profile Display: Your profile is visible in the player search database.",
+    "Visibility: Basic presence on the largest recruiting platform.",
+    "Featured Article & Video: Profile includes an article and video on the available player page.",
+    "Personalized Article: A custom news article highlights your strengths.",
+    "Scouting Report: Detailed evaluation by former college coaches.",
+    "Weekly Reports: Featured in weekly reports sent to thousands of coaches.",
   ];
   useEffect(() => {
-    const subscription = localStorage.getItem('subscription');
+    const subscription = localStorage.getItem("subscription");
     if (subscription) {
       setActivePlan(JSON.parse(subscription));
     }
@@ -48,56 +59,53 @@ const Pricing = () => {
             onClick={toggle}
             className={`${commonPillStyle} ${
               isMonthlyActive ? `text-primaryColor` : `text-[#fff]`
-            }`}
-          >
+            }`}>
             Monthly
           </p>
           <p
             onClick={toggle}
             className={`${commonPillStyle} ${
               isYearlyActive ? `text-primaryColor` : `text-[#fff]`
-            }`}
-          >
+            }`}>
             Yearly
           </p>
 
           {/* pill */}
           <span
             className={`w-[128px] h-10 bg-[#fff] rounded-[30px] ease-in-out duration-300 absolute top-1/2 -translate-y-1/2 ${
-              isToggled ? `left-[50%]` : 'left-2 '
-            } z-10 `}
-          ></span>
+              isToggled ? `left-[50%]` : "left-2 "
+            } z-10 `}></span>
         </div>
 
         {/* pricing listgt area */}
-        <div className="flex items-center flex-col lg:flex-row lg:gap-[30px] mt-5 lg:mt-[50px] mb-12 lg:mb-[100px] ">
+        <div className="flex items-START flex-col lg:flex-row lg:gap-[30px] mt-5 lg:mt-[50px] mb-12 lg:mb-[100px] ">
           <SinglePricing
             isToggled={isToggled}
             isYearlyActive={isYearlyActive}
-            price={30}
-            title={'Basic'}
-            yearlyPrice={45}
+            price={12.99}
+            title={"Basic"}
+            yearlyPrice={140}
             serviceList={serviceList}
             activePlan={activePlan}
             setActivePlan={setActivePlan}
           />
           <SinglePricing
             isToggled={isToggled}
-            price={60}
+            price={18.99}
             isYearlyActive={isYearlyActive}
-            title={'Professional'}
-            yearlyPrice={105}
-            serviceList={serviceList}
+            title={"Professional"}
+            yearlyPrice={205}
+            serviceList={serviceList2}
             activePlan={activePlan}
             setActivePlan={setActivePlan}
           />
           <SinglePricing
             isToggled={isToggled}
-            price={99}
+            price={23.99}
             isYearlyActive={isYearlyActive}
-            title={'Enterprise'}
-            yearlyPrice={250}
-            serviceList={serviceList}
+            title={"Enterprise"}
+            yearlyPrice={259}
+            serviceList={serviceList3}
             activePlan={activePlan}
             setActivePlan={setActivePlan}
           />

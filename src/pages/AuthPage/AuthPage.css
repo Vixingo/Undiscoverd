@@ -8,6 +8,16 @@
   font-size: 16px;
   line-height: 26px;
 }
+
+.phone_div {
+  padding-left: 25px;
+  border-radius: 30px;
+  background: #f8fafc;
+  width: 100%;
+  color: #000;
+  font-size: 16px;
+  line-height: 26px;
+}
 .auth--form input::placeholder {
   color: #818181;
   font-size: 16px;

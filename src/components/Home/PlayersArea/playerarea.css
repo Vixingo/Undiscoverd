@@ -12,3 +12,6 @@
     margin-left: -20px;
   }
 }
+p {
+  margin: 0px !important;
+}
