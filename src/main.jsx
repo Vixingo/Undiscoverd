@@ -1,11 +1,11 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./assets/fonts/stylesheet.css";
 import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import router from "./router/router.jsx";
+import ReactDOM from "react-dom/client";
 import {
     PaymentElement,
     Elements,
@@ -24,7 +24,10 @@ const stripePromise = loadStripe(
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 // import "@fortawesome/fontawesome-free/css/all.min.css";
 import { ThemeProvider } from "./themes/ThemeProvider.jsx";
-ReactDOM.createRoot(document.getElementById("root")).render(
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(
     <React.StrictMode>
         <Elements stripe={stripePromise}>
             <ProfileProvider>
