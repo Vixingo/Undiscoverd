@@ -3,9 +3,14 @@ import react from "@vitejs/plugin-react";
 import vercel from "vite-plugin-vercel";
 // https://vitejs.dev/config/
 export default defineConfig({
-  server: {
-    port: process.env.PORT,
-  },
-  // base: "undiscovered-website",
-  plugins: [react(), vercel()],
+    server: {
+        port: process.env.PORT,
+    },
+    // base: "undiscovered-website",
+    plugins: [react(), vercel()],
+    build: {
+        rollupOptions: {
+            external: ["react-dom/client"],
+        },
+    },
 });
