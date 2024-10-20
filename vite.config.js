@@ -8,5 +8,5 @@ export default defineConfig({
         port: process.env.PORT,
     },
     // base: "undiscovered-website",
-    plugins: [react(), vercel(), ReactDOM],
+    plugins: [react(), vercel()],
 });
