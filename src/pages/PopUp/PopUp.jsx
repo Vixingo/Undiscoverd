@@ -21,9 +21,9 @@ const PopoUp = () => {
     React.useEffect(() => {
         fetchData();
 
-        // setTimeout(() => {
-        setOpen(true);
-        // }, 2000);
+        setTimeout(() => {
+            setOpen(true);
+        }, 2000);
     }, []);
     const fetchData = async () => {
         let response = await fetch("http://dummyjson.com/users", {
@@ -43,7 +43,7 @@ const PopoUp = () => {
         setOpen(false);
     };
     const theme = useTheme();
-    const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+    // const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
     return (
         <>
@@ -52,7 +52,7 @@ const PopoUp = () => {
                     open={open}
                     onClose={handleClose}
                     maxWidth="md"
-                    fullScreen={fullScreen}
+                    // fullScreen={fullScreen}
                     PaperProps={{
                         component: "form",
                         onSubmit: (event) => {
@@ -69,6 +69,7 @@ const PopoUp = () => {
                 >
                     <DialogTitle>
                         <Typography
+                            variant="h3"
                             sx={{
                                 color: "#ED2023",
                                 fontFamily: "SF Pro Display",
@@ -108,6 +109,7 @@ const PopoUp = () => {
                     <DialogContent sx={{ backgroundColor: "#ED2023" }}>
                         <DialogContentText>
                             <Typography
+                                variant="h6"
                                 sx={{
                                     color: "#fff",
                                     fontFamily: "SF Pro Display",
@@ -116,12 +118,16 @@ const PopoUp = () => {
                                     lineHeight: "35px",
                                     //
                                     padding: "12px",
+                                    "@media (max-width:600px)": {
+                                        lineHeight: "26px",
+                                    },
                                 }}
                             >
                                 {" "}
                                 "At Undiscovered Recruits, we believe every
-                                player deserves a shot at being discovered. By
-                                signing up today, you’ll get access to:
+                                player deserves a shot at being discovered.{" "}
+                                <br /> By signing up today, you’ll get access
+                                to:
                                 <br />
                                 <ul style={{ listStyle: "outside" }}>
                                     <li>
